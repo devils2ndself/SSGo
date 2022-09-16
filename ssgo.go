@@ -30,16 +30,18 @@ func main() {
 		if input != "" {
 			processInput(input, output)
 		} else if help {
-			fmt.Println("Basic usage: ssgo [flag]")
+			fmt.Println("Basic usage: ssgo [flag] [value]")
 			fmt.Println("Flags:")
-			fmt.Println("\t[-i | --input] [path] - ")
-			fmt.Println("\t[-v | --version] - Display installed version of SSGo")
-			fmt.Println("\t[-h | --help] - Display detailed help message")
+			fmt.Println("\t[-i | --input] [path]      \t- Path to a .txt file OR a folder containing .txt files to be turned into HTML.")
+			fmt.Println("\t                           \t  By default, places generated HTML into ./dist")
+			fmt.Println("\t[-o | --output] [out path] \t- Optional. Additionaly changes the output path of generated HTML")
+			fmt.Println("\n\t[-v | --version]           \t- Display installed version of SSGo")
+			fmt.Println("\t[-h | --help]              \t- Display detailed help message")
 
 		} else if version {
 			fmt.Println("SSGo version 0.1")
 		} else {
-			fmt.Println("Unrecognized flag. Use 'ssgo [-h | --help]' for available commands.")
+			fmt.Println("Invalid call. Use 'ssgo [-h | --help]' for available commands.")
 		}
 	}
 
