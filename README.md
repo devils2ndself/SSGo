@@ -19,7 +19,7 @@ To build a binary, or executable, run:
 
 - `ssgo --help` - Display detailed help message
 
-## Functionality
+## Features
 
 - Generates HTML files for each .txt file in `input`.
 
