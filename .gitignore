@@ -1,10 +1,10 @@
 # Binaries for programs and plugins
 # I know it's bad to keep executables but I need it in the repo :)
-# *.exe
-# *.exe~
-# *.dll
-# *.so
-# *.dylib
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
 # Test binary, built with `go test -c`
 *.test
