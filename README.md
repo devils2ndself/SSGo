@@ -8,7 +8,7 @@ In order to build the application, you first need to [get Go CLI](https://go.dev
 To build a binary, or executable, run:   
 `git clone https://github.com/devils2ndself/SSGo.git`  
 `cd SSGO`  
-`go build ssgo.go`
+`go build ssgo.go` _or_ `go install` to install globally 
 
 ## Usage
 
