@@ -19,6 +19,8 @@ To build a binary, or executable, run:
 
 - `ssgo --help` - Display detailed help message
 
+Please note, that if built locally, some users will need to use `./ssgo` instead of `ssgo`.
+
 ## Features
 
 - Generates HTML files for each .txt file in `input`.
