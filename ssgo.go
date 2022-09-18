@@ -26,10 +26,10 @@ func main() {
 		version bool = false
 	)
 
-	flag.StringVarP(&input, "input", "i", "", "path to .txt file or folder to be turned into HTML")
-	flag.StringVarP(&output, "output", "o", output, "path to end result")
-	flag.BoolVarP(&help, "help", "h", false, "display detailed help")
-	flag.BoolVarP(&version, "version", "v", false, "display current version")
+	flag.StringVarP(&input, "input", "i", "", "Path to a .txt file OR a folder containing .txt files to be turned into HTML")
+	flag.StringVarP(&output, "output", "o", output, "Optional. Additionaly changes the output path of generated HTML")
+	flag.BoolVarP(&help, "help", "h", false, "Display detailed help message")
+	flag.BoolVarP(&version, "version", "v", false, "Display installed version of SSGo")
 
 	flag.Parse()
 
