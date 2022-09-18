@@ -1,5 +1,5 @@
 # SSGo
-A simple Static Site Generator built using Go language.
+A simple Static Site Generator built using Go language. Preview available at https://devils2ndself.github.io/SSGo/
 
 ## Set-up
 
