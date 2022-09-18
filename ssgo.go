@@ -59,6 +59,7 @@ func main() {
 }
 
 func processInput(input string, output string) {
+
 	fmt.Println("Input: " + input)
 
 	fileInfo, err := os.Stat(input)
@@ -136,8 +137,6 @@ func processInput(input string, output string) {
 
 		generateHTML(input, output, name)
 	}
-
-		
 }
 
 func generateHTML(input string, output string, name string) {
@@ -176,7 +175,6 @@ func generateHTML(input string, output string, name string) {
 		}
 	}
 
-
 	writer := bufio.NewWriter(newFile)
 	_, werr := writer.WriteString(beforeTitleHTML + title + afterTitleHTML)
 	if werr != nil {
@@ -185,7 +183,7 @@ func generateHTML(input string, output string, name string) {
 
 	if titleExists {
 		fmt.Println("Title:", title)
-		firstLine = "<h1>"+title+"</h1>\n<p>"
+		firstLine = "<h1>" + title + "</h1>\n<p>"
 	} else {
 		fmt.Println("No title found")
 		reTxtFile, err := os.Open(input)
@@ -203,9 +201,8 @@ func generateHTML(input string, output string, name string) {
 		log.Fatal("Error writing to buffer!")
 	}
 
-
 	for scanner.Scan() {
-		text :=strings.TrimSpace(scanner.Text())
+		text := strings.TrimSpace(scanner.Text())
 		if text != "" {
 			_, werr = writer.WriteString(text)
 			if werr != nil {
