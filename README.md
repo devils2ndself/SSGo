@@ -27,11 +27,13 @@ Please note, that if built locally, some users will need to use `./ssgo` instead
 
 - Encloses every paragraph of text separated by a blank line in `<p>` tag.
 
-- If the first line of the .txt file is followed by 2 empty lines, it will be used as a title. The `<title>` will be assigned to it and it will be enclosed into `<h1>` tag instead of regular `<p>`.
+- If the first line of the .txt file is followed by 2 empty lines, it will be used as a title. The `<title>` will be assigned to it and it will be enclosed into `<h1>` tag instead of regular `<p>` - _optinal feature #1_.
 
 - The name of the generated HTML files will be the same as the original .txt files.
 
-- Generated files go to `dist` folder unless any other path is specified with `--output` flag. If the new output path does not exist, it will create a new directory to accomodate.
+- Also provides a cool style to generated HTML - _optinal feature #6_.
+
+- Generated files go to `dist` folder unless any other path is specified with `--output` flag. If the new output path does not exist, it will create a new directory to accomodate - _optinal feature #2_.
 
 - If output directory is `path`, each time new text is used for HTML generation, the directory will be wiped completely. Careful, don't lose valuable files there!
 
