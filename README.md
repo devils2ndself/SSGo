@@ -30,6 +30,8 @@ Or `go install` to install globally.
 
 Please note, that if built locally, some users will need to use `./ssgo` instead of `ssgo`.
 
+Also, please be aware that shorthand flags, like `-i`, take as the argument everything that follows that character, i.e. `-info` will be understood as `-i nfo`. It's not me, it's the standards :/
+
 ## Features
 
 - Generates HTML files for each .txt file in `input`.
