@@ -19,10 +19,10 @@ func main() {
 		displayVersion bool = false
 	)
 
-	flag.StringVarP(&input, "input", "i", "", "Path to a .txt file OR a folder containing .txt files to be turned into HTML")
-	flag.StringVarP(&output, "output", "o", output, "Optional. Additionaly changes the output path of generated HTML")
-	flag.BoolVarP(&displayHelp, "help", "h", false, "Display detailed help message")
-	flag.BoolVarP(&displayVersion, "version", "v", false, "Display installed version of SSGo")
+	flag.StringVarP(&input, "input", "i", "", utils.InputHelpMessage)
+	flag.StringVarP(&output, "output", "o", output, utils.OutputHelpMessage)
+	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
+	flag.BoolVarP(&displayVersion, "version", "v", false, utils.VersionHelpMessage)
 
 	flag.Parse()
 
@@ -33,14 +33,7 @@ func main() {
 		if input != "" {
 			utils.ProcessInput(input, output)
 		} else if displayHelp {
-			fmt.Println("Basic usage: ssgo [flag] [value]")
-			fmt.Println("Flags:")
-			fmt.Println("\t[-i | --input] [path]      \t- Path to a .txt file OR a folder containing .txt files to be turned into HTML")
-			fmt.Println("\t                           \t  For paths with spaces, please enclose them into double quotation marks, e.g. \"some path\"")
-			fmt.Println("\t                           \t  By default, places generated HTML into ./dist.")
-			fmt.Println("\t[-o | --output] [out path] \t- Optional. Additionaly changes the output path of generated HTML")
-			fmt.Println("\n\t[-v | --version]           \t- Display installed version of SSGo")
-			fmt.Println("\t[-h | --help]              \t- Display detailed help message")
+			utils.PrintHelp()
 
 		} else if displayVersion {
 			fmt.Println("SSGo version " + version)

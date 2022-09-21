@@ -15,6 +15,24 @@ const (
 	closingHTML string = "\n</body>\n</html>"
 )
 
+const (
+	InputHelpMessage = "Path to a .txt file OR a folder containing .txt files to be turned into HTML"
+	OutputHelpMessage = "Optional. Additionaly changes the output path of generated HTML"
+	HelpHelpMessage = "Display detailed help message"
+	VersionHelpMessage = "Display installed version of SSGo"
+)
+
+func PrintHelp() {
+	fmt.Println("Basic usage: ssgo [flag] [value]")
+	fmt.Println("Flags:")
+	fmt.Println("\t[-i | --input] [path]      \t- " + InputHelpMessage)
+	fmt.Println("\t                           \t  For paths with spaces, please enclose them into double quotation marks, e.g. \"some path\"")
+	fmt.Println("\t                           \t  By default, places generated HTML into ./dist.")
+	fmt.Println("\t[-o | --output] [out path] \t- " + OutputHelpMessage)
+	fmt.Println("\n\t[-v | --version]           \t- " + HelpHelpMessage)
+	fmt.Println("\t[-h | --help]              \t- " + VersionHelpMessage)
+}
+
 func ProcessInput(input string, output string) {
 
 	fmt.Println("Input: " + input)
