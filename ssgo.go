@@ -8,19 +8,20 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const version string = "0.1"
+const version string = "0.1.1"
+const defaultOutput string= "dist"
 
 func main() {
 	
 	var (
 		input string = ""
-		output string = "dist"
+		output string = defaultOutput
 		displayHelp bool = false
 		displayVersion bool = false
 	)
 
 	flag.StringVarP(&input, "input", "i", "", utils.InputHelpMessage)
-	flag.StringVarP(&output, "output", "o", output, utils.OutputHelpMessage)
+	flag.StringVarP(&output, "output", "o", defaultOutput, utils.OutputHelpMessage)
 	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
 	flag.BoolVarP(&displayVersion, "version", "v", false, utils.VersionHelpMessage)
 

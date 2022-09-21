@@ -23,10 +23,10 @@ const (
 )
 
 const (
-	InputHelpMessage = "Path to a .txt file OR a folder containing .txt files to be turned into HTML"
-	OutputHelpMessage = "Optional. Additionaly changes the output path of generated HTML"
-	HelpHelpMessage = "Display detailed help message"
-	VersionHelpMessage = "Display installed version of SSGo"
+	InputHelpMessage string = "Path to a .txt file OR a folder containing .txt files to be turned into HTML"
+	OutputHelpMessage string = "Optional. Additionaly changes the output path of generated HTML"
+	HelpHelpMessage string = "Display detailed help message"
+	VersionHelpMessage string = "Display installed version of SSGo"
 )
 
 func PrintHelp() {
