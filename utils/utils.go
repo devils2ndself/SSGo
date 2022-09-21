@@ -285,7 +285,7 @@ func GenerateHTML(input string, output string, name string) {
 }
 
 func CheckMarkdownPrefix(text string) (string, bool) {
-	acceptedPrefixes := [2]string{"# ", "#  "}
+	acceptedPrefixes := [2]string{"# ", "## "}
 
 	for _, prefix := range acceptedPrefixes {
 		if strings.HasPrefix(text, prefix) {
