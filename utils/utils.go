@@ -44,7 +44,7 @@ func PrintHelp() {
 
 // Checks output string and make/clear directory
 func prepareOutput(output string) {
-
+	
 	output = strings.TrimSpace(output)
 	if debug {
 		fmt.Println("Output folder: " + output)
@@ -76,7 +76,7 @@ func prepareOutput(output string) {
 			log.Fatal(err)
 		}
 	}
-}
+} 
 
 
 // Takes input path, validates single .txt file OR folder and checks all files in the folder
@@ -97,7 +97,7 @@ func ProcessInput(input string, output string) {
 	if fileInfo.IsDir() {
 
 		var files []File
-
+				
 		fmt.Println("Looking for .txt files in the directory...")
 
 		// Walks through all elements in the directory
@@ -143,8 +143,8 @@ func ProcessInput(input string, output string) {
 			name     string = strings.TrimSuffix(basename, ext)
 		)
 
-		if ext != ".txt" && ext != ".md" {
-			log.Fatal("Error! Input file is not a .txt or .md file")
+		if ext != ".txt" {
+			log.Fatal("Error! Input file is not a .txt")
 		}
 
 		// Prepare output directory
@@ -159,7 +159,7 @@ func ProcessInput(input string, output string) {
 // Takes path to .txt file as an input, reads it, and creates name.html in output folder
 func GenerateHTML(input string, output string, name string) {
 
-	// Create new empty .html file
+	// Create new empty .html file 
 	newFile, err := os.Create(output + "/" + name + ".html")
 	if err != nil {
 		log.Fatal(err)
@@ -215,7 +215,7 @@ func GenerateHTML(input string, output string, name string) {
 			fmt.Println("No title found")
 		}
 		// If title does not exist, restart Scanner by opening another instance of the same file
-		// This way, it will read again from the first line
+		// This way, it will read again from the first line 
 		reTxtFile, err := os.Open(input)
 		if err != nil {
 			log.Fatal(err)
@@ -238,12 +238,7 @@ func GenerateHTML(input string, output string, name string) {
 		if text != "" {
 			// Line with content = append to the current <p>
 
-			if filepath.Ext(input) == ".md" && CheckMarkdownPrefix(text) {
-				_, werr = writer.WriteString(fmt.Sprintf("<h1>%s</h1>", text))
-				if werr != nil {
-					log.Fatal("Error writing to new file!")
-				}
-			}
+			// Markdown text manipulation goes here
 
 			_, werr = writer.WriteString(text)
 			if werr != nil {
@@ -273,16 +268,4 @@ func GenerateHTML(input string, output string, name string) {
 		log.Println("Writing buffer to file...")
 	}
 	writer.Flush()
-}
-
-func CheckMarkdownPrefix(text string) bool {
-	acceptedPrefixes := [2]string{"# ", "#  "}
-
-	for _, prefix := range acceptedPrefixes {
-		if strings.HasPrefix(text, prefix) {
-			return true
-		}
-	}
-
-	return false
 }
