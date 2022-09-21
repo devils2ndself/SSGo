@@ -114,7 +114,7 @@ func ProcessInput(input string, output string) {
 				)
 
 				// If .txt, add file to files slice
-				if ext == ".txt" {
+				if ext == ".txt" || ext == ".md" {
 					fmt.Printf("\tFile: %s\n", path)
 					var f File = File{path: path, name: name}
 					files = append(files, f)
