@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const debug bool = false
+
 const (
 	beforeTitleHTML string = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/water.css@2/out/water.css\">\n<title>"
 	afterTitleHTML string = "</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n"
@@ -23,6 +25,7 @@ const (
 )
 
 func PrintHelp() {
+
 	fmt.Println("Basic usage: ssgo [flag] [value]")
 	fmt.Println("Flags:")
 	fmt.Println("\t[-i | --input] [path]      \t- " + InputHelpMessage)
@@ -33,19 +36,12 @@ func PrintHelp() {
 	fmt.Println("\t[-h | --help]              \t- " + VersionHelpMessage)
 }
 
-func ProcessInput(input string, output string) {
-
-	fmt.Println("Input: " + input)
-
-	fileInfo, err := os.Stat(input)
-
-	if os.IsNotExist(err) {
-		fmt.Println("Error! No such file or directory!")
-		os.Exit(1)
-	}
-
+func prepareOutput(output string) {
+	
 	output = strings.TrimSpace(output)
-	fmt.Println("Output: " + output)
+	if debug {
+		fmt.Println("Output folder: " + output)
+	}
 
 	if output == "" {
 		fmt.Println("Error! Output directory string is empty!")
@@ -74,10 +70,26 @@ func ProcessInput(input string, output string) {
 			log.Fatal(err)
 		}
 	}
+} 
+
+func ProcessInput(input string, output string) {
+
+	if debug {
+		fmt.Println("Input: " + input)
+	}
+
+	fileInfo, err := os.Stat(input)
+
+	if os.IsNotExist(err) {
+		fmt.Println("Error! No such file or directory!")
+		os.Exit(1)
+	}
+
+	prepareOutput(output)
 
 	if fileInfo.IsDir() {
 
-		fmt.Println("Iterating through directory...")
+		fmt.Println("Looking for .txt files in the directory...")
 
 		filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
@@ -91,7 +103,7 @@ func ProcessInput(input string, output string) {
 				)
 
 				if ext == ".txt" {
-					fmt.Printf("File: %s\n", path)
+					fmt.Printf("\tFile: %s\n", path)
 					GenerateHTML(path, output, name)
 				}
 			}
@@ -112,6 +124,7 @@ func ProcessInput(input string, output string) {
 
 		GenerateHTML(input, output, name)
 	}
+	fmt.Println("Done! Check '" + output + "' directory to see generated HTML.")
 }
 
 func GenerateHTML(input string, output string, name string) {
@@ -120,7 +133,9 @@ func GenerateHTML(input string, output string, name string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("File created at " + output + "/" + name + ".html")
+	if debug {
+		log.Println("File created at " + output + "/" + name + ".html")
+	}
 	defer newFile.Close()
 
 	txtFile, err := os.Open(input)
@@ -157,10 +172,14 @@ func GenerateHTML(input string, output string, name string) {
 	}
 
 	if titleExists {
-		fmt.Println("Title:", title)
+		if debug {
+			fmt.Println("Title:", title)
+		}
 		firstLine = "<h1>" + title + "</h1>\n<p>"
 	} else {
-		fmt.Println("No title found")
+		if debug {
+			fmt.Println("No title found")
+		}
 		reTxtFile, err := os.Open(input)
 		if err != nil {
 			log.Fatal(err)
@@ -200,6 +219,8 @@ func GenerateHTML(input string, output string, name string) {
 		log.Fatal("Error writing to new file!")
 	}
 
-	log.Println("Writing buffer to file...")
+	if debug {
+		log.Println("Writing buffer to file...")
+	}
 	writer.Flush()
 }

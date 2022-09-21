@@ -11,7 +11,7 @@ import (
 const version string = "0.1"
 
 func main() {
-
+	
 	var (
 		input string = ""
 		output string = "dist"
@@ -34,7 +34,6 @@ func main() {
 			utils.ProcessInput(input, output)
 		} else if displayHelp {
 			utils.PrintHelp()
-
 		} else if displayVersion {
 			fmt.Println("SSGo version " + version)
 		} else {
