@@ -41,6 +41,8 @@ func PrintHelp() {
 	fmt.Println("\t[-h | --help]              \t- " + VersionHelpMessage)
 }
 
+
+// Checks output string and make/clear directory
 func prepareOutput(output string) {
 	
 	output = strings.TrimSpace(output)
@@ -76,28 +78,34 @@ func prepareOutput(output string) {
 	}
 } 
 
+
+// Takes input path, validates single .txt file OR folder and checks all files in the folder
 func ProcessInput(input string, output string) {
 
 	if debug {
 		fmt.Println("Input: " + input)
 	}
 
+	// Reads stats about input path
 	fileInfo, err := os.Stat(input)
 
 	if os.IsNotExist(err) {
 		log.Fatal("Error! No such file or directory!")
 	}
 
+	// If input is directory
 	if fileInfo.IsDir() {
 
 		var files []File
 				
 		fmt.Println("Looking for .txt files in the directory...")
 
+		// Walks through all elements in the directory
 		filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				log.Fatalf(err.Error())
 			}
+			// If file
 			if !info.IsDir() {
 				var (
 					basename string = info.Name()
@@ -105,6 +113,7 @@ func ProcessInput(input string, output string) {
 					name     string = strings.TrimSuffix(basename, ext)
 				)
 
+				// If .txt, add file to files slice
 				if ext == ".txt" {
 					fmt.Printf("\tFile: %s\n", path)
 					var f File = File{path: path, name: name}
@@ -114,8 +123,11 @@ func ProcessInput(input string, output string) {
 			return nil
 		})
 
+		// If there is at least 1 .txt file
 		if len(files) != 0 {
+			// Prepare output directory
 			prepareOutput(output)
+			// Generate .html for each .txt file in the input directory
 			for i := 0; i < len(files); i++ {
 				GenerateHTML(files[i].path, output, files[i].name)
 			}
@@ -123,8 +135,8 @@ func ProcessInput(input string, output string) {
 			log.Fatal("No .txt files in the directory!")
 		}
 
-
 	} else {
+		//If input is a file
 		var (
 			basename string = fileInfo.Name()
 			ext      string = filepath.Ext(basename)
@@ -135,6 +147,7 @@ func ProcessInput(input string, output string) {
 			log.Fatal("Error! Input file is not a .txt")
 		}
 
+		// Prepare output directory
 		prepareOutput(output)
 
 		GenerateHTML(input, output, name)
@@ -142,8 +155,11 @@ func ProcessInput(input string, output string) {
 	fmt.Println("Done! Check '" + output + "' directory to see generated HTML.")
 }
 
+
+// Takes path to .txt file as an input, reads it, and creates name.html in output folder
 func GenerateHTML(input string, output string, name string) {
 
+	// Create new empty .html file 
 	newFile, err := os.Create(output + "/" + name + ".html")
 	if err != nil {
 		log.Fatal(err)
@@ -163,6 +179,7 @@ func GenerateHTML(input string, output string, name string) {
 
 	var titleExists bool = true
 	var title string = name
+
 	// Check title
 	scanner.Scan()
 	firstLine := scanner.Text()
@@ -180,12 +197,14 @@ func GenerateHTML(input string, output string, name string) {
 		}
 	}
 
+	// Writing HTML head to buffer
 	writer := bufio.NewWriter(newFile)
 	_, werr := writer.WriteString(beforeTitleHTML + title + afterTitleHTML)
 	if werr != nil {
 		log.Fatal("Error writing to buffer!")
 	}
 
+	// Determine first line to be written in the body - title or regular <p>
 	if titleExists {
 		if debug {
 			fmt.Println("Title:", title)
@@ -195,6 +214,8 @@ func GenerateHTML(input string, output string, name string) {
 		if debug {
 			fmt.Println("No title found")
 		}
+		// If title does not exist, restart Scanner by opening another instance of the same file
+		// This way, it will read again from the first line 
 		reTxtFile, err := os.Open(input)
 		if err != nil {
 			log.Fatal(err)
@@ -205,19 +226,26 @@ func GenerateHTML(input string, output string, name string) {
 		firstLine = "<p>"
 	}
 
+	// Write first line - title in <h1> or empty opening <p>
 	_, werr = writer.WriteString(firstLine)
 	if werr != nil {
 		log.Fatal("Error writing to buffer!")
 	}
 
+	// Scan line by line and append to html buffer
 	for scanner.Scan() {
 		text := strings.TrimSpace(scanner.Text())
 		if text != "" {
+			// Line with content = append to the current <p>
+
+			// Markdown text manipulation goes here
+
 			_, werr = writer.WriteString(text)
 			if werr != nil {
 				log.Fatal("Error writing to new file!")
 			}
 		} else {
+			// Empty line = close </p> and open next one
 			_, werr = writer.WriteString("</p>\n<p>")
 			if werr != nil {
 				log.Fatal("Error writing to new file!")
@@ -229,11 +257,13 @@ func GenerateHTML(input string, output string, name string) {
 		log.Fatal(err)
 	}
 
+	// Writing closing HTML tags to buffer
 	_, w2err := writer.WriteString("</p>" + closingHTML)
 	if w2err != nil {
 		log.Fatal("Error writing to new file!")
 	}
 
+	// Writing buffer to the file
 	if debug {
 		log.Println("Writing buffer to file...")
 	}

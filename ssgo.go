@@ -9,6 +9,7 @@ import (
 )
 
 const version string = "0.1.1"
+
 const defaultOutput string= "dist"
 
 func main() {
@@ -20,6 +21,7 @@ func main() {
 		displayVersion bool = false
 	)
 
+	// Flag initialization
 	flag.StringVarP(&input, "input", "i", "", utils.InputHelpMessage)
 	flag.StringVarP(&output, "output", "o", defaultOutput, utils.OutputHelpMessage)
 	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
