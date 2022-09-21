@@ -1,7 +1,7 @@
 # SSGo
 A simple Static Site Generator built using Go language. 
 
-Lets you generate HTML files from either a single `.txt` file OR multiple `.txt` files in a given directory.
+Lets you generate HTML files from either a single `.txt` file or multiple `.txt` files in a given directory.
 
 Preview of generated HTML is available at https://devils2ndself.github.io/SSGo.
 
