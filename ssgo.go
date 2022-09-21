@@ -11,6 +11,8 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
+const version string = "0.1"
+
 const (
 	beforeTitleHTML string = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/water.css@2/out/water.css\">\n<title>"
 	afterTitleHTML string = "</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n"
@@ -22,14 +24,14 @@ func main() {
 	var (
 		input string = ""
 		output string = "dist"
-		help bool = false
-		version bool = false
+		displayHelp bool = false
+		displayVersion bool = false
 	)
 
 	flag.StringVarP(&input, "input", "i", "", "Path to a .txt file OR a folder containing .txt files to be turned into HTML")
 	flag.StringVarP(&output, "output", "o", output, "Optional. Additionaly changes the output path of generated HTML")
-	flag.BoolVarP(&help, "help", "h", false, "Display detailed help message")
-	flag.BoolVarP(&version, "version", "v", false, "Display installed version of SSGo")
+	flag.BoolVarP(&displayHelp, "help", "h", false, "Display detailed help message")
+	flag.BoolVarP(&displayVersion, "version", "v", false, "Display installed version of SSGo")
 
 	flag.Parse()
 
@@ -39,7 +41,7 @@ func main() {
 	} else {
 		if input != "" {
 			processInput(input, output)
-		} else if help {
+		} else if displayHelp {
 			fmt.Println("Basic usage: ssgo [flag] [value]")
 			fmt.Println("Flags:")
 			fmt.Println("\t[-i | --input] [path]      \t- Path to a .txt file OR a folder containing .txt files to be turned into HTML")
@@ -49,8 +51,8 @@ func main() {
 			fmt.Println("\n\t[-v | --version]           \t- Display installed version of SSGo")
 			fmt.Println("\t[-h | --help]              \t- Display detailed help message")
 
-		} else if version {
-			fmt.Println("SSGo version 0.1")
+		} else if displayVersion {
+			fmt.Println("SSGo version " + version)
 		} else {
 			fmt.Println("Invalid call. Use 'ssgo [-h | --help]' for available commands.")
 		}
