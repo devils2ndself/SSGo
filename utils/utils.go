@@ -303,7 +303,7 @@ func GenerateMarkdownHtml(prefix string, text string) string {
 	}
 
 	if formatString, found := prefixesHtmlFormatString[prefix]; found {
-		return fmt.Sprintf(formatString, text) + "</p>\n<p>"
+		return fmt.Sprintf(formatString, strings.Replace(text, prefix, "", 1)) + "</p>\n<p>"
 	}
 
 	return text
