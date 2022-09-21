@@ -238,16 +238,26 @@ func GenerateHTML(input string, output string, name string) {
 		if text != "" {
 			// Line with content = append to the current <p>
 
-			if filepath.Ext(input) == ".md" && CheckMarkdownPrefix(text) {
-				_, werr = writer.WriteString(fmt.Sprintf("<h1>%s</h1>", text))
-				if werr != nil {
-					log.Fatal("Error writing to new file!")
+			// Parse markdown file
+			markdownValid := false
+
+			if filepath.Ext(input) == ".md" {
+				if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
+					_, werr = writer.WriteString(GenerateMarkdownHtml(prefix, text))
+					if werr != nil {
+						log.Fatal("Error writing to new file!")
+					} else {
+						markdownValid = true
+					}
 				}
 			}
 
-			_, werr = writer.WriteString(text)
-			if werr != nil {
-				log.Fatal("Error writing to new file!")
+			// Write the text as is if markdown format was invalid
+			if !markdownValid {
+				_, werr = writer.WriteString(text)
+				if werr != nil {
+					log.Fatal("Error writing to new file!")
+				}
 			}
 		} else {
 			// Empty line = close </p> and open next one
@@ -275,14 +285,27 @@ func GenerateHTML(input string, output string, name string) {
 	writer.Flush()
 }
 
-func CheckMarkdownPrefix(text string) bool {
-	acceptedPrefixes := [2]string{"# ", "#  "}
+func CheckMarkdownPrefix(text string) (string, bool) {
+	acceptedPrefixes := [2]string{"# ", "## "}
 
 	for _, prefix := range acceptedPrefixes {
 		if strings.HasPrefix(text, prefix) {
-			return true
+			return prefix, true
 		}
 	}
 
-	return false
+	return "", false
+}
+
+func GenerateMarkdownHtml(prefix string, text string) string {
+	prefixesHtmlFormatString := map[string]string{
+		"# ":  "<h1>%s</h1>",
+		"## ": "<h2>%s</h2>",
+	}
+
+	if formatString, found := prefixesHtmlFormatString[prefix]; found {
+		return fmt.Sprintf(formatString, text)
+	}
+
+	return text
 }
