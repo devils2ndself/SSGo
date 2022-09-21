@@ -143,8 +143,8 @@ func ProcessInput(input string, output string) {
 			name     string = strings.TrimSuffix(basename, ext)
 		)
 
-		if ext != ".txt" {
-			log.Fatal("Error! Input file is not a .txt")
+		if ext != ".txt" && ext != ".md" {
+			log.Fatal("Error! Input file is not a .txt or .md file")
 		}
 
 		// Prepare output directory
@@ -238,7 +238,12 @@ func GenerateHTML(input string, output string, name string) {
 		if text != "" {
 			// Line with content = append to the current <p>
 
-			// Markdown text manipulation goes here
+			if filepath.Ext(input) == ".md" && CheckMarkdownPrefix(text) {
+				_, werr = writer.WriteString(fmt.Sprintf("<h1>%s</h1>", text))
+				if werr != nil {
+					log.Fatal("Error writing to new file!")
+				}
+			}
 
 			_, werr = writer.WriteString(text)
 			if werr != nil {
@@ -268,4 +273,16 @@ func GenerateHTML(input string, output string, name string) {
 		log.Println("Writing buffer to file...")
 	}
 	writer.Flush()
+}
+
+func CheckMarkdownPrefix(text string) bool {
+	acceptedPrefixes := [2]string{"# ", "#  "}
+
+	for _, prefix := range acceptedPrefixes {
+		if strings.HasPrefix(text, prefix) {
+			return true
+		}
+	}
+
+	return false
 }
