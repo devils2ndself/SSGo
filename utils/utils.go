@@ -11,6 +11,11 @@ import (
 
 const debug bool = false
 
+type File struct {
+	path    string ""
+	name	string ""
+}
+
 const (
 	beforeTitleHTML string = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/water.css@2/out/water.css\">\n<title>"
 	afterTitleHTML string = "</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n"
@@ -44,8 +49,7 @@ func prepareOutput(output string) {
 	}
 
 	if output == "" {
-		fmt.Println("Error! Output directory string is empty!")
-		os.Exit(1)
+		log.Fatal("Error! Output directory string is empty!")
 	}
 
 	out, outerr := os.Stat(output)
@@ -81,14 +85,13 @@ func ProcessInput(input string, output string) {
 	fileInfo, err := os.Stat(input)
 
 	if os.IsNotExist(err) {
-		fmt.Println("Error! No such file or directory!")
-		os.Exit(1)
+		log.Fatal("Error! No such file or directory!")
 	}
-
-	prepareOutput(output)
 
 	if fileInfo.IsDir() {
 
+		var files []File
+				
 		fmt.Println("Looking for .txt files in the directory...")
 
 		filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
@@ -104,11 +107,22 @@ func ProcessInput(input string, output string) {
 
 				if ext == ".txt" {
 					fmt.Printf("\tFile: %s\n", path)
-					GenerateHTML(path, output, name)
+					var f File = File{path: path, name: name}
+					files = append(files, f)
 				}
 			}
 			return nil
 		})
+
+		if len(files) != 0 {
+			prepareOutput(output)
+			for i := 0; i < len(files); i++ {
+				GenerateHTML(files[i].path, output, files[i].name)
+			}
+		} else {
+			log.Fatal("No .txt files in the directory!")
+		}
+
 
 	} else {
 		var (
@@ -118,9 +132,10 @@ func ProcessInput(input string, output string) {
 		)
 
 		if ext != ".txt" {
-			fmt.Println("Error! Input file is not a .txt")
-			os.Exit(1)
+			log.Fatal("Error! Input file is not a .txt")
 		}
+
+		prepareOutput(output)
 
 		GenerateHTML(input, output, name)
 	}
