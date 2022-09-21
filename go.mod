@@ -1,4 +1,4 @@
-module ssgo
+module github.com/devils2ndself/SSGo
 
 go 1.19
 
