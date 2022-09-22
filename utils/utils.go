@@ -23,7 +23,7 @@ const (
 )
 
 const (
-	InputHelpMessage string = "Path to a .txt file OR a folder containing .txt files to be turned into HTML"
+	InputHelpMessage string = "Path to a .txt / .md file OR a folder containing .txt / .md files to be turned into HTML"
 	OutputHelpMessage string = "Optional. Additionaly changes the output path of generated HTML"
 	HelpHelpMessage string = "Display detailed help message"
 	VersionHelpMessage string = "Display installed version of SSGo"
@@ -98,7 +98,7 @@ func ProcessInput(input string, output string) {
 
 		var files []File
 
-		fmt.Println("Looking for .txt files in the directory...")
+		fmt.Println("Looking for .txt / .md files in the directory...")
 
 		// Walks through all elements in the directory
 		filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
@@ -132,7 +132,7 @@ func ProcessInput(input string, output string) {
 				GenerateHTML(files[i].path, output, files[i].name)
 			}
 		} else {
-			log.Fatal("No .txt files in the directory!")
+			log.Fatal("No .txt / .md files in the directory!")
 		}
 
 	} else {

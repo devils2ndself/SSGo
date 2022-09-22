@@ -8,7 +8,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const version string = "0.1.1"
+const version string = "0.2"
 
 const defaultOutput string= "dist"
 
