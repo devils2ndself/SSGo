@@ -324,12 +324,12 @@ func CheckMarkdownPrefix(text string) (string, bool) {
 }
 
 func GenerateMarkdownHtml(prefix string, text string) string {
-	prefixesHtmlFormatString := map[string]string{
+	prefixesHtmlFormatStrings := map[string]string{
 		"# ":  "<h1>%s</h1>",
 		"## ": "<h2>%s</h2>",
 	}
 
-	if formatString, found := prefixesHtmlFormatString[prefix]; found {
+	if formatString, found := prefixesHtmlFormatStrings[prefix]; found {
 		return fmt.Sprintf(formatString, strings.Replace(text, prefix, "", 1)) + "\n"
 	}
 
