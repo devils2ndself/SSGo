@@ -44,7 +44,7 @@ func PrintHelp() {
 
 // Checks output string and make/clear directory
 func prepareOutput(output string) {
-	
+
 	output = strings.TrimSpace(output)
 	if debug {
 		fmt.Println("Output folder: " + output)
@@ -76,7 +76,7 @@ func prepareOutput(output string) {
 			log.Fatal(err)
 		}
 	}
-} 
+}
 
 
 // Takes input path, validates single .txt file OR folder and checks all files in the folder
@@ -97,7 +97,7 @@ func ProcessInput(input string, output string) {
 	if fileInfo.IsDir() {
 
 		var files []File
-				
+
 		fmt.Println("Looking for .txt files in the directory...")
 
 		// Walks through all elements in the directory
@@ -114,7 +114,7 @@ func ProcessInput(input string, output string) {
 				)
 
 				// If .txt, add file to files slice
-				if ext == ".txt" {
+				if ext == ".txt" || ext == ".md" {
 					fmt.Printf("\tFile: %s\n", path)
 					var f File = File{path: path, name: name}
 					files = append(files, f)
@@ -143,8 +143,8 @@ func ProcessInput(input string, output string) {
 			name     string = strings.TrimSuffix(basename, ext)
 		)
 
-		if ext != ".txt" {
-			log.Fatal("Error! Input file is not a .txt")
+		if ext != ".txt" && ext != ".md" {
+			log.Fatal("Error! Input file is not a .txt or .md file")
 		}
 
 		// Prepare output directory
@@ -159,7 +159,7 @@ func ProcessInput(input string, output string) {
 // Takes path to .txt file as an input, reads it, and creates name.html in output folder
 func GenerateHTML(input string, output string, name string) {
 
-	// Create new empty .html file 
+	// Create new empty .html file
 	newFile, err := os.Create(output + "/" + name + ".html")
 	if err != nil {
 		log.Fatal(err)
@@ -204,18 +204,22 @@ func GenerateHTML(input string, output string, name string) {
 		log.Fatal("Error writing to buffer!")
 	}
 
-	// Determine first line to be written in the body - title or regular <p>
+	// Write title or restart Scanner
 	if titleExists {
 		if debug {
 			fmt.Println("Title:", title)
 		}
-		firstLine = "<h1>" + title + "</h1>\n<p>"
+		firstLine = "<h1>" + title + "</h1>\n"
+		_, werr = writer.WriteString(firstLine)
+		if werr != nil {
+			log.Fatal("Error writing to buffer!")
+		}
 	} else {
 		if debug {
 			fmt.Println("No title found")
 		}
 		// If title does not exist, restart Scanner by opening another instance of the same file
-		// This way, it will read again from the first line 
+		// This way, it will read again from the first line
 		reTxtFile, err := os.Open(input)
 		if err != nil {
 			log.Fatal(err)
@@ -223,33 +227,70 @@ func GenerateHTML(input string, output string, name string) {
 		defer reTxtFile.Close()
 
 		scanner = bufio.NewScanner(reTxtFile)
-		firstLine = "<p>"
 	}
 
-	// Write first line - title in <h1> or empty opening <p>
-	_, werr = writer.WriteString(firstLine)
-	if werr != nil {
-		log.Fatal("Error writing to buffer!")
-	}
+	paragraphOpen := false
+	paragraphDelimiterFound := false
+	firstNonMarkdownLineWritten := false
 
 	// Scan line by line and append to html buffer
 	for scanner.Scan() {
 		text := strings.TrimSpace(scanner.Text())
 		if text != "" {
-			// Line with content = append to the current <p>
+			// Write closing </p> tag if delimiter was found and opening <p> was previously written
+			if paragraphOpen && paragraphDelimiterFound {
+				_, werr = writer.WriteString("</p>\n")
+				if werr != nil {
+					log.Fatal("Error writing to new file!")
+				}
+				paragraphOpen = false
+			}
 
-			// Markdown text manipulation goes here
+			// Parse markdown file
+			markdownValid := false
 
-			_, werr = writer.WriteString(text)
-			if werr != nil {
-				log.Fatal("Error writing to new file!")
+			if filepath.Ext(input) == ".md" {
+				if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
+					// We don't want to put headers inside <p> tags
+					if paragraphOpen {
+						_, werr = writer.WriteString("</p>\n")
+						if werr != nil {
+							log.Fatal("Error writing to new file!")
+						}
+						paragraphOpen = false
+						// This is set to true so for next non markdown text a new <p> is written first
+						paragraphDelimiterFound = true
+					}
+					_, werr = writer.WriteString(GenerateMarkdownHtml(prefix, text))
+					if werr != nil {
+						log.Fatal("Error writing to new file!")
+					} else {
+						markdownValid = true
+					}
+				}
+			}
+
+			if !markdownValid {
+				// Write opening <p> tag is this is the first non markdown line
+				if !firstNonMarkdownLineWritten {
+					text = "<p>" + text
+					paragraphOpen = true
+					firstNonMarkdownLineWritten = true
+				}
+				
+				// If last read line was a paragraph delimiter, write opening <p> first
+				if !paragraphOpen && paragraphDelimiterFound {
+					text = "<p>" + text
+					paragraphOpen = true
+					paragraphDelimiterFound = false
+				}
+				_, werr = writer.WriteString(text)
+				if werr != nil {
+					log.Fatal("Error writing to new file!")
+				}
 			}
 		} else {
-			// Empty line = close </p> and open next one
-			_, werr = writer.WriteString("</p>\n<p>")
-			if werr != nil {
-				log.Fatal("Error writing to new file!")
-			}
+			paragraphDelimiterFound = true
 		}
 	}
 
@@ -268,4 +309,29 @@ func GenerateHTML(input string, output string, name string) {
 		log.Println("Writing buffer to file...")
 	}
 	writer.Flush()
+}
+
+func CheckMarkdownPrefix(text string) (string, bool) {
+	acceptedPrefixes := [2]string{"# ", "## "}
+
+	for _, prefix := range acceptedPrefixes {
+		if strings.HasPrefix(text, prefix) {
+			return prefix, true
+		}
+	}
+
+	return "", false
+}
+
+func GenerateMarkdownHtml(prefix string, text string) string {
+	prefixesHtmlFormatStrings := map[string]string{
+		"# ":  "<h1>%s</h1>",
+		"## ": "<h2>%s</h2>",
+	}
+
+	if formatString, found := prefixesHtmlFormatStrings[prefix]; found {
+		return fmt.Sprintf(formatString, strings.Replace(text, prefix, "", 1)) + "\n"
+	}
+
+	return text
 }
