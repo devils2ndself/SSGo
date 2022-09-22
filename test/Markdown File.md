@@ -1,6 +1,7 @@
 This is the title of the file
 
 
+This is the first paragraph
 # Heading 1
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet tincidunt nulla. Maecenas nec felis vel nulla faucibus ornare. Integer vitae ipsum fringilla, dapibus enim ac, imperdiet felis. Fusce placerat tortor vitae tortor laoreet vehicula. Donec dictum sit amet quam ut faucibus. Mauris vel tellus tristique, congue sem ut, condimentum erat. Aliquam erat volutpat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris volutpat erat lacus, egestas viverra enim mattis sed.
 
