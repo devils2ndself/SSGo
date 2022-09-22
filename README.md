@@ -40,7 +40,7 @@ Also, please be aware that shorthand flags, like `-i`, take as the argument ever
 
 - If the first line of the .txt or .md file is followed by 2 empty lines, it will be used as a title. The `<title>` will be assigned to it and it will be enclosed into `<h1>` tag instead of regular `<p>` - _optional feature #1_.
 
-- The name of the generated HTML files will be the same as the original .txt files.
+- The name of the generated HTML files will be the same as the original .txt or .md files.
 
 - Also provides a cool style to generate HTML - _optional feature #6_.
 
@@ -51,6 +51,7 @@ Also, please be aware that shorthand flags, like `-i`, take as the argument ever
 - If `--output` is specified, the directory at path will not be erased like with `dist` folder. Just in case someone specifies `--output C:\...`
 
 ### Markdown Features
+These feaures are supported for files with an extension of '.md'
 
 - Lines beginning with "# " will be wrapped within an h1 tag: ``# This is heading 1`` becomes ``<h1>This is heading 1</h1> `` 
 - Lines beginning with "## " will be wrapped within an h2 tag: ``## This is heading 2`` becomes ``<h2>This is heading 2</h2> ``
