@@ -53,8 +53,11 @@ Also, please be aware that shorthand flags, like `-i`, take as the argument ever
 ### Markdown Features
 These feaures are supported for files with an extension of '.md'
 
-- Lines beginning with "# " will be wrapped within an h1 tag: ``# This is heading 1`` becomes ``<h1>This is heading 1</h1> `` 
-- Lines beginning with "## " will be wrapped within an h2 tag: ``## This is heading 2`` becomes ``<h2>This is heading 2</h2> ``
+- Lines beginning with "# ", "## " will be wrapped within an h1 and h2 tags respectively: ``# This is heading 1`` becomes ``<h1>This is heading 1</h1> `` 
+
+- Lines that contain only `-`, `*`, or `_` in quantity of *3 or more* will be a horizontal rule: `---` becomes `<hr>`
+
+- Any text that is contained within \` characters will be wrapped within `<code>` tag: `some code` becomes `<code>some code</code>`
 
 ## Contributing
 
