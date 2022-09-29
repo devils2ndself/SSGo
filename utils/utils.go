@@ -250,7 +250,23 @@ func GenerateHTML(input string, output string, name string) {
 			markdownValid := false
 
 			if filepath.Ext(input) == ".md" {
-				if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
+				
+				if CheckHorizontalRule(text) {
+					if paragraphOpen {
+						_, werr = writer.WriteString("</p>\n")
+						if werr != nil {
+							log.Fatal("Error writing to new file!")
+						}
+						paragraphOpen = false
+					}
+					paragraphDelimiterFound = true
+					_, werr = writer.WriteString("<hr>\n")
+					if werr != nil {
+						log.Fatal("Error writing to new file!")
+					} 
+					markdownValid = true
+
+				} else if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
 					// We don't want to put headers inside <p> tags
 					if paragraphOpen {
 						_, werr = writer.WriteString("</p>\n")
@@ -309,6 +325,24 @@ func GenerateHTML(input string, output string, name string) {
 		log.Println("Writing buffer to file...")
 	}
 	writer.Flush()
+}
+
+func CheckHorizontalRule(text string) (bool) {
+	acceptedPrefixes := [3]string{"---", "***", "___"}
+
+	for _, prefix := range acceptedPrefixes {
+		if strings.HasPrefix(text, prefix) {
+			currentChar := rune(prefix[0])
+			for _, char := range text {
+				if char != currentChar {
+					return false
+				}
+			} 
+			return true
+		}
+	}
+
+	return false
 }
 
 func CheckMarkdownPrefix(text string) (string, bool) {
