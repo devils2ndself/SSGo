@@ -252,6 +252,7 @@ func GenerateHTML(input string, output string, name string) {
 			if filepath.Ext(input) == ".md" {
 				
 				if CheckHorizontalRule(text) {
+					// First, close existing paragraph
 					if paragraphOpen {
 						_, werr = writer.WriteString("</p>\n")
 						if werr != nil {
@@ -259,6 +260,7 @@ func GenerateHTML(input string, output string, name string) {
 						}
 						paragraphOpen = false
 					}
+					// Set delimeter to true, as this is exactly as blank line
 					paragraphDelimiterFound = true
 					_, werr = writer.WriteString("<hr>\n")
 					if werr != nil {
