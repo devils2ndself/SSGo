@@ -250,7 +250,6 @@ func GenerateHTML(input string, output string, name string) {
 			markdownValid := false
 
 			if filepath.Ext(input) == ".md" {
-				
 				if CheckHorizontalRule(text) {
 					// First, close existing paragraph
 					if paragraphOpen {
@@ -268,21 +267,26 @@ func GenerateHTML(input string, output string, name string) {
 					} 
 					markdownValid = true
 
-				} else if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
-					// We don't want to put headers inside <p> tags
-					if paragraphOpen {
-						_, werr = writer.WriteString("</p>\n")
+				} else {
+					// Turn inline Markdown features to HTML
+					text = GenerateInlineMarkdownHtml(text)
+					// If prefix is a heading or similar markdown feature 
+					// that overwrites regular paragraph, change it
+					if prefix, validPrefix := CheckMarkdownPrefix(text); validPrefix {
+						// We don't want to put headers inside <p> tags
+						if paragraphOpen {
+							_, werr = writer.WriteString("</p>\n")
+							if werr != nil {
+								log.Fatal("Error writing to new file!")
+							}
+							paragraphOpen = false
+							// This is set to true so for next non markdown text a new <p> is written first
+							paragraphDelimiterFound = true
+						}
+						_, werr = writer.WriteString(GeneratePrefixMarkdownHtml(prefix, text))
 						if werr != nil {
 							log.Fatal("Error writing to new file!")
-						}
-						paragraphOpen = false
-						// This is set to true so for next non markdown text a new <p> is written first
-						paragraphDelimiterFound = true
-					}
-					_, werr = writer.WriteString(GenerateMarkdownHtml(prefix, text))
-					if werr != nil {
-						log.Fatal("Error writing to new file!")
-					} else {
+						} 
 						markdownValid = true
 					}
 				}
@@ -359,7 +363,35 @@ func CheckMarkdownPrefix(text string) (string, bool) {
 	return "", false
 }
 
-func GenerateMarkdownHtml(prefix string, text string) string {
+func GenerateInlineMarkdownHtml(text string) string {
+	// Idea of set + stack is good until we meet bold text...
+	// Bold text consists of 2 characters instead of 1, so this will need to be reworked 
+	acceptedDelimiters := map[rune]string{
+		'`': "<code>%s</code>",
+	}
+	var delimiterStack []rune
+
+	for _, character := range text {
+		// If the character is in the set
+		if _, found := acceptedDelimiters[character]; found {
+			// Opening delimiter - add to stack
+			if len(delimiterStack) == 0 || delimiterStack[len(delimiterStack)-1] != character {
+				delimiterStack = append(delimiterStack, character)
+			} else {
+				// Closing delimiter - remove from stack and append to HTML
+				delimiterStack = delimiterStack[:len(delimiterStack)-1]
+				if character == '`' {
+					text = strings.Replace(text, string(character), "<code>", 1)
+					text = strings.Replace(text, string(character), "</code>", 1)
+				}
+			}
+		}
+	}
+
+	return text
+}
+
+func GeneratePrefixMarkdownHtml(prefix string, text string) string {
 	prefixesHtmlFormatStrings := map[string]string{
 		"# ":  "<h1>%s</h1>",
 		"## ": "<h2>%s</h2>",
