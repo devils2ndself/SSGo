@@ -19,6 +19,7 @@ func main() {
 		output string = defaultOutput
 		displayHelp bool = false
 		displayVersion bool = false
+		config string = ""
 	)
 
 	// Flag initialization
