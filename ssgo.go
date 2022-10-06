@@ -26,6 +26,7 @@ func main() {
 	flag.StringVarP(&output, "output", "o", defaultOutput, utils.OutputHelpMessage)
 	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
 	flag.BoolVarP(&displayVersion, "version", "v", false, utils.VersionHelpMessage)
+	flag.StringVarP(&config, "config", "c", "", utils.ConfigHelpMessage)
 
 	flag.Parse()
 
