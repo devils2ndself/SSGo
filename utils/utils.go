@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -27,6 +28,7 @@ const (
 	OutputHelpMessage string = "Optional. Additionaly changes the output path of generated HTML"
 	HelpHelpMessage string = "Display detailed help message"
 	VersionHelpMessage string = "Display installed version of SSGo"
+	ConfigHelpMessage  string = "Path to a .json file containing SSGo configuration options"
 )
 
 func PrintHelp() {
@@ -39,6 +41,7 @@ func PrintHelp() {
 	fmt.Println("\t[-o | --output] [out path] \t- " + OutputHelpMessage)
 	fmt.Println("\n\t[-v | --version]           \t- " + HelpHelpMessage)
 	fmt.Println("\t[-h | --help]              \t- " + VersionHelpMessage)
+	fmt.Println("\t[-c | --config]              \t- " + ConfigHelpMessage)
 }
 
 
@@ -155,6 +158,27 @@ func ProcessInput(input string, output string) {
 	fmt.Println("Done! Check '" + output + "' directory to see generated HTML.")
 }
 
+// Takes path to .json file, reads it, and calls ProcessInput using contained options
+func ProcessConfig(config string) {
+
+	// Read config .json file
+	configFile, err := os.ReadFile(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Assign json values to options struct
+	options := struct {
+		Input  string `json:"input"`
+		Output string `json:"output"`
+	}{
+		Output: "dist",
+	}
+	json.Unmarshal(configFile, &options)
+
+	// Call ProcessInput using config file options
+	ProcessInput(options.Input, options.Output)
+}
 
 // Takes path to .txt file as an input, reads it, and creates name.html in output folder
 func GenerateHTML(input string, output string, name string) {

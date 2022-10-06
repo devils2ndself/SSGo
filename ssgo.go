@@ -19,6 +19,7 @@ func main() {
 		output string = defaultOutput
 		displayHelp bool = false
 		displayVersion bool = false
+		config string = ""
 	)
 
 	// Flag initialization
@@ -26,6 +27,7 @@ func main() {
 	flag.StringVarP(&output, "output", "o", defaultOutput, utils.OutputHelpMessage)
 	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
 	flag.BoolVarP(&displayVersion, "version", "v", false, utils.VersionHelpMessage)
+	flag.StringVarP(&config, "config", "c", "", utils.ConfigHelpMessage)
 
 	flag.Parse()
 
@@ -33,7 +35,9 @@ func main() {
 		fmt.Println("Usage: ssgo -i [path] -o [out path]\nHelp: ssgo [-h | --help]")
 		os.Exit(1)
 	} else {
-		if input != "" {
+		if config != "" {
+			utils.ProcessConfig(config)
+		}else if input != "" {
 			utils.ProcessInput(input, output)
 		} else if displayHelp {
 			utils.PrintHelp()

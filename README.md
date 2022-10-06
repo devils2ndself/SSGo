@@ -21,8 +21,10 @@ Or `go install` to install globally.
 
 ## Usage
 
-- `ssgo --input [in] --output [out[` - Generate HTML from .txt or .md file at `in` path (can be a single .txt or .md file, or directory) to `out` path.  
+- `ssgo --input [in] --output [out]` - Generate HTML from .txt or .md file at `in` path (can be a single .txt or .md file, or directory) to `out` path.  
 `--output` is optional, the default out is `dist` folder in the current directory
+
+- `ssgo --config [cfg]` - Uses the options from .json configuration file at `cfg` path to specify options. 
 
 - `ssgo --version` - Display installed version of SSGo
 
@@ -49,6 +51,8 @@ Also, please be aware that shorthand flags, like `-i`, take as the argument ever
 - If the output directory is `path`, each time new text is used for HTML generation, the directory will be wiped completely. Be careful, don't lose valuable files there!
 
 - If `--output` is specified, the directory at path will not be erased like with `dist` folder. Just in case someone specifies `--output C:\...`
+
+- If `--config' is specified, SSG options can be supplied through a .json configuration file instead of through the command-line.
 
 ### Markdown Features
 These feaures are supported for files with an extension of '.md'
