@@ -35,7 +35,9 @@ func main() {
 		fmt.Println("Usage: ssgo -i [path] -o [out path]\nHelp: ssgo [-h | --help]")
 		os.Exit(1)
 	} else {
-		if input != "" {
+		if config != "" {
+			utils.ProcessConfig(config)
+		}else if input != "" {
 			utils.ProcessInput(input, output)
 		} else if displayHelp {
 			utils.PrintHelp()
