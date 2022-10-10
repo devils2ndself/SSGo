@@ -52,7 +52,7 @@ Also, please be aware that shorthand flags, like `-i`, take as the argument ever
 
 - If `--output` is specified, the directory at path will not be erased like with `dist` folder. Just in case someone specifies `--output C:\...`
 
-- If `--config' is specified, SSG options can be supplied through a .json configuration file instead of through the command-line.
+- If `--config` is specified, SSG options can be supplied through a .json configuration file instead of through the command-line.
 
 ### Markdown Features
 These feaures are supported for files with an extension of '.md'
