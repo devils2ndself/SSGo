@@ -4,19 +4,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/devils2ndself/SSGo/utils"
+	utils "github.com/devils2ndself/SSGo/utils"
 	flag "github.com/spf13/pflag"
 )
 
 const version string = "0.3"
 
-const defaultOutput string= "dist"
-
 func main() {
-	
 	var (
 		input string = ""
-		output string = defaultOutput
+		output string = utils.DefaultOutput
 		displayHelp bool = false
 		displayVersion bool = false
 		config string = ""
@@ -24,7 +21,7 @@ func main() {
 
 	// Flag initialization
 	flag.StringVarP(&input, "input", "i", "", utils.InputHelpMessage)
-	flag.StringVarP(&output, "output", "o", defaultOutput, utils.OutputHelpMessage)
+	flag.StringVarP(&output, "output", "o", utils.DefaultOutput, utils.OutputHelpMessage)
 	flag.BoolVarP(&displayHelp, "help", "h", false, utils.HelpHelpMessage)
 	flag.BoolVarP(&displayVersion, "version", "v", false, utils.VersionHelpMessage)
 	flag.StringVarP(&config, "config", "c", "", utils.ConfigHelpMessage)
@@ -47,5 +44,4 @@ func main() {
 			fmt.Println("Invalid call. Use 'ssgo [-h | --help]' for available commands.")
 		}
 	}
-
 }
