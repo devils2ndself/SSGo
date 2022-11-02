@@ -10,8 +10,8 @@ import (
 )
 
 type File struct {
-	path    string ""
-	name	string ""
+	path string ""
+	name string ""
 }
 
 // Takes path to .json file, reads it, and calls ProcessInput using contained options
@@ -30,7 +30,11 @@ func ProcessConfig(config string) {
 	}{
 		Output: "dist",
 	}
-	json.Unmarshal(configFile, &options)
+
+	jsonErr := json.Unmarshal(configFile, &options)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
 
 	// Call ProcessInput using config file options
 	ProcessInput(options.Input, options.Output)
@@ -55,7 +59,7 @@ func ProcessInput(input string, output string) {
 		fmt.Println("Looking for .txt / .md files in the directory...")
 
 		// Walks through all elements in the directory
-		filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
+		walkErr := filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				log.Fatalf(err.Error())
 			}
@@ -72,6 +76,9 @@ func ProcessInput(input string, output string) {
 			}
 			return nil
 		})
+		if walkErr != nil {
+			log.Fatal(walkErr)
+		}
 
 		// If there is at least 1 .txt file
 		if len(files) != 0 {
@@ -104,8 +111,8 @@ func ProcessInput(input string, output string) {
 // Returns split name and extension of a filename
 func getNameAndExt(basename string) (string, string) {
 	var (
-		ext      string = filepath.Ext(basename)
-		name     string = strings.TrimSuffix(basename, ext)
+		ext  string = filepath.Ext(basename)
+		name string = strings.TrimSuffix(basename, ext)
 	)
 	return name, ext
 }

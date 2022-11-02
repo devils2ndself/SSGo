@@ -12,11 +12,11 @@ const version string = "0.4"
 
 func main() {
 	var (
-		input string = ""
-		output string = utils.DefaultOutput
-		displayHelp bool = false
-		displayVersion bool = false
-		config string = ""
+		input          string = ""
+		output         string = utils.DefaultOutput
+		displayHelp    bool   = false
+		displayVersion bool   = false
+		config         string = ""
 	)
 
 	// Flag initialization
@@ -34,7 +34,7 @@ func main() {
 	} else {
 		if config != "" {
 			utils.ProcessConfig(config)
-		}else if input != "" {
+		} else if input != "" {
 			utils.ProcessInput(input, output)
 		} else if displayHelp {
 			utils.PrintHelp()

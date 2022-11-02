@@ -13,8 +13,8 @@ import (
 
 const (
 	beforeTitleHTML string = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/water.css@2/out/water.css\">\n<title>"
-	afterTitleHTML string = "</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n"
-	closingHTML string = "\n</body>\n</html>"
+	afterTitleHTML  string = "</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n"
+	closingHTML     string = "\n</body>\n</html>"
 )
 
 // Takes path to .txt file as an input, reads it, and creates name.html in output folder
@@ -54,7 +54,7 @@ func GenerateHTML(input string, output string, name string) {
 		}
 
 	} else {
-		// 
+		//
 		txtFile, err := os.Open(input)
 		if err != nil {
 			log.Fatal(err)
@@ -130,7 +130,7 @@ func GenerateHTML(input string, output string, name string) {
 					}
 					paragraphOpen = false
 				}
-				
+
 				// If last read line was a paragraph delimiter, write opening <p> first
 				if !paragraphOpen && paragraphDelimiterFound {
 					text = "<p>" + text
@@ -141,7 +141,7 @@ func GenerateHTML(input string, output string, name string) {
 				if werr != nil {
 					log.Fatal("Error writing to new file!")
 				}
-				
+
 			} else {
 				paragraphDelimiterFound = true
 			}

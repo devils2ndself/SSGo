@@ -3,9 +3,9 @@ package utils
 import "fmt"
 
 const (
-	InputHelpMessage string = "Path to a .txt / .md file OR a folder containing .txt / .md files to be turned into HTML"
-	OutputHelpMessage string = "Optional. Additionaly changes the output path of generated HTML"
-	HelpHelpMessage string = "Display detailed help message"
+	InputHelpMessage   string = "Path to a .txt / .md file OR a folder containing .txt / .md files to be turned into HTML"
+	OutputHelpMessage  string = "Optional. Additionaly changes the output path of generated HTML"
+	HelpHelpMessage    string = "Display detailed help message"
 	VersionHelpMessage string = "Display installed version of SSGo"
 	ConfigHelpMessage  string = "Path to a .json file containing SSGo configuration options"
 )
