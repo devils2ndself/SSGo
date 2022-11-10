@@ -19,6 +19,27 @@ go build ssgo.go
 ```
 Or `go install` to install globally.
 
+## Testing
+
+Anytime you contribute changes, please make sure all of the tests pass, and make sure to update tests when necessary.
+
+>In order to run all tests, run the following in CLI:  
+>`go test -v github.com/devils2ndself/SSGo/utils`
+
+>If you would like to run any specific test, you can run (change `Test_ParseText_NoHeading` to desired test)  
+>`go test -run ^Test_ParseText_NoHeading$ -v github.com/devils2ndself/SSGo/utils`  
+
+### Coverage 
+
+To see test coverage, first generate coverage file, then use the cover tool to generate HTML from the coverage file.  
+
+```
+go test -coverprofile cover.out github.com/devils2ndself/SSGo/utils
+go tool cover -html=cover.out
+```
+
+Then you can open coverage in browser as HTML.
+
 ## Formatting
 
 Anytime you perform changes that you want to contribute, please make sure the code is formatted appropriately.

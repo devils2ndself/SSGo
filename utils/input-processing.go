@@ -65,7 +65,7 @@ func ProcessInput(input string, output string) {
 			}
 			// If file
 			if !info.IsDir() {
-				name, ext := getNameAndExt(info.Name())
+				name, ext := GetNameAndExt(info.Name())
 
 				// If .txt, add file to files slice
 				if _, exists := AcceptedInputFileTypes[ext]; exists {
@@ -94,7 +94,7 @@ func ProcessInput(input string, output string) {
 
 	} else {
 		//If input is a file
-		name, ext := getNameAndExt(fileInfo.Name())
+		name, ext := GetNameAndExt(fileInfo.Name())
 
 		if _, exists := AcceptedInputFileTypes[ext]; !exists {
 			log.Fatal("Error! Input file is not a .txt or .md file")
@@ -109,7 +109,7 @@ func ProcessInput(input string, output string) {
 }
 
 // Returns split name and extension of a filename
-func getNameAndExt(basename string) (string, string) {
+func GetNameAndExt(basename string) (string, string) {
 	var (
 		ext  string = filepath.Ext(basename)
 		name string = strings.TrimSuffix(basename, ext)
