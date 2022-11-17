@@ -73,5 +73,5 @@ func Test_ParseMarkdown_hr(t *testing.T) {
 
 func Test_ParseMarkdown_blockquote(t *testing.T) {
 	result := utils.ParseMarkdown([]byte("> Test"))
-	Equal(t, "<blockquote>\n<p>Test</p>\n</blockquote>", string(result))
+	Equal(t, "<blockquote>\n<p>Test</p>\n</blockquote>\n", string(result))
 }
