@@ -70,3 +70,8 @@ func Test_ParseMarkdown_hr(t *testing.T) {
 	result := utils.ParseMarkdown([]byte("---\n****\n____"))
 	Equal(t, "<hr>\n\n<hr>\n\n<hr>\n", string(result))
 }
+
+func Test_ParseMarkdown_blockquote(t *testing.T) {
+	result := utils.ParseMarkdown([]byte("> Test"))
+	Equal(t, "<blockquote>\n<p>Test</p>\n</blockquote>\n", string(result))
+}
