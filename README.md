@@ -9,7 +9,7 @@ Preview of generated HTML is available at https://devils2ndself.github.io/SSGo.
 
 In order to install SSGo, please first [install Go](https://go.dev/dl/).
 
-Use `go install github.com/devils2ndself/SSGo@v1.0.0` in order to install SSGo to your local machine.
+Use `go install github.com/devils2ndself/SSGo@v1.0.3` in order to install SSGo to your local machine.
 
 ## Usage
 
