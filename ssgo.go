@@ -8,7 +8,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const version string = "0.4"
+const version string = "1.0.1"
 
 func main() {
 	var (

@@ -5,6 +5,12 @@ Lets you generate HTML files from either a single `.txt` file or multiple `.txt`
 
 Preview of generated HTML is available at https://devils2ndself.github.io/SSGo.
 
+## Installation
+
+In order to install SSGo, please first [install Go](https://go.dev/dl/).
+
+Use `go install github.com/devils2ndself/SSGo@v1.0.0` in order to install SSGo to your local machine.
+
 ## Usage
 
 - `ssgo --input [in] --output [out]` - Generate HTML from .txt or .md file at `in` path (can be a single .txt or .md file, or directory) to `out` path.  
